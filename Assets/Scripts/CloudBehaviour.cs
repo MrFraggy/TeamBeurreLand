@@ -11,22 +11,16 @@ public class CloudBehaviour : MonoBehaviour {
 	void Start () {
 
 		m_rainRate = Random.Range(0, 100);
-		//m_isRaining = false;
-		spawnRain(this.transform.position);
+		m_isRaining = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		return;
-		//MOTION
-		if (transform.position.z < 0.0f && transform.position.z > -50.0f){
-			transform.position += new Vector3(Time.deltaTime*Random.Range (1, 5), 0, 0);
-			//transform.TransformDirection(Quaternion.Euler(0.0f, (float)Random.Range (90, 180), 0.0f).eulerAngles);
-		}else if(transform.position.z >= 0.0f && transform.position.z < 50.0f){
-			transform.position +=  new Vector3(-Time.deltaTime*Random.Range (1, 5), 0, 0);
-			//transform.TransformDirection(Quaternion.Euler(0.0f, (float)Random.Range (90, 180), 0.0f).eulerAngles);
-		}
 
+		//MOTION
+		if ((transform.position.x < 0.0f && transform.position.x > -50.0f) || (transform.position.x > 0.0f && transform.position.x < 50.0f)) {
+			transform.position += new Vector3 (Time.deltaTime * Random.Range (1, 5), 0, 0);
+		}
 		//RAIN
 		if(m_isRaining == true){
 			m_rainRate = m_rainRate - Time.deltaTime*10;
