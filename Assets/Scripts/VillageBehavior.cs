@@ -18,8 +18,10 @@ public class VillageBehavior : MonoBehaviour {
 
 	void OnParticleCollision (GameObject other) {
 		++rainQuantity;
+
 		if (rainQuantity >= WaterRequired) {
 			Debug.Log ("Village Rescued");
+			gameObject.renderer.material.color = Color.green;
 			this.collider.enabled = false;
 		}
 	}
