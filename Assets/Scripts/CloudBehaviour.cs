@@ -9,6 +9,7 @@ public class CloudBehaviour : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
 		m_rainRate = Random.Range(0, 100);
 		m_isRaining = false;
 	}
@@ -16,6 +17,14 @@ public class CloudBehaviour : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+		//MOTION
+		if (transform.position.z < 0.0f && transform.position.z > -50.0f){
+			transform.position.Set (transform.position.x, transform.position.y + Time.deltaTime/10,transform.position.z + Time.deltaTime);
+		}else if(transform.position.z > 0.0f && transform.position.z < 50.0f){
+			transform.position.Set (transform.position.x, transform.position.y + Time.deltaTime/10,transform.position.z - Time.deltaTime);
+		}
+
+		//RAIN
 		if(m_isRaining == true){
 			m_rainRate = m_rainRate - Time.deltaTime*10;
 			Debug.Log("RATE => " + m_rainRate);
@@ -38,14 +47,11 @@ public class CloudBehaviour : MonoBehaviour {
 				m_isRaining = true;
 			}
 		}
-
-		gameObject.renderer.material.color = new Color(m_rainRate*10, m_rainRate*10, m_rainRate*10);
 	}
 
 	//Instantiate the rain
 	void spawnRain(Vector3 position)
 	{
-		// Instantiate them
 		GameObject rain = (GameObject)Instantiate(m_rainPrefab, position, Quaternion.identity);
 		rain.transform.parent = transform;
 		rain.transform.rotation = Quaternion.Euler(90f,0f,0f);
@@ -53,8 +59,9 @@ public class CloudBehaviour : MonoBehaviour {
 		
 	}
 
-	void suppressRain(){
-		// Suppress the rain
+	// Suppress the rain
+	void suppressRain()
+	{
 		foreach(Transform child in this.transform){
 			if(child.tag == "Rain"){
 				Destroy(child.gameObject);
