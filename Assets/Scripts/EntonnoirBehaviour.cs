@@ -4,8 +4,8 @@ using MiddleVR_Unity3D;
 
 public class EntonnoirBehaviour : MonoBehaviour {
 
-	public int WaterCapacity = 10;
-	private int waterQuantity = 0;
+	public float WaterCapacity = 10;
+	private float waterQuantity = 0;
 	public Vector3 minHeight = new Vector3(0.0f, 0.0f, 0.0f);
 	public Vector3 maxHeight = new Vector3(1.0f, 1.0f, 1.0f);
 	public float minRadius = 0.1f;
@@ -15,6 +15,7 @@ public class EntonnoirBehaviour : MonoBehaviour {
 	private ParticleSystem waterSplash = null;
 	private float holeSize;
 	private float initialEmissionRate;
+	private float initialStartSpeed;
 
 	// Use this for initialization
 	void Start () {
@@ -22,6 +23,7 @@ public class EntonnoirBehaviour : MonoBehaviour {
 		waterSplash.enableEmission = false;
 		holeSize = 1.0f;
 		initialEmissionRate = waterSplash.emissionRate;
+		initialStartSpeed = waterSplash.startSpeed;
 		if (MiddleVR.VRDeviceMgr != null) {
 			entonnoirHole = MiddleVR.VRDeviceMgr.GetJoystick ("RazerHydra.Joystick0");
 		}
@@ -31,17 +33,23 @@ public class EntonnoirBehaviour : MonoBehaviour {
 	void FixedUpdate () {
 		if (entonnoirHole == null)
 			return;
-		//Debug.Log (entonnoirHole.GetAxisNb ());
 		float axis = entonnoirHole.GetAxisValue(2);
 		holeSize = 1.0f - axis;
-		//Debug.Log ("Hole size : " + holeSize);
+
+		if (waterQuantity > 0)
+			waterQuantity -= holeSize;
+		if (waterQuantity <= 0)
+			waterSplash.enableEmission = false;
+		else {
+			waterSplash.startSpeed = initialStartSpeed * holeSize;
+			waterSplash.enableEmission = true;
+		}
 	}
 
 	void OnParticleCollision(GameObject other) {
 		if (waterQuantity < WaterCapacity)
-			++waterQuantity;
-		else
-			waterSplash.enableEmission = true;
+			waterQuantity += 1.0f - holeSize;
+
 		waterSplash.emissionRate = initialEmissionRate * holeSize;
 
 	}
