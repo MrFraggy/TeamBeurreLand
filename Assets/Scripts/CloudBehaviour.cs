@@ -11,11 +11,13 @@ public class CloudBehaviour : MonoBehaviour {
 	void Start () {
 
 		m_rainRate = Random.Range(0, 100);
-		m_isRaining = false;
+		//m_isRaining = false;
+		spawnRain(this.transform.position);
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		return;
 		//MOTION
 		if (transform.position.z < 0.0f && transform.position.z > -50.0f){
 			transform.position += new Vector3(Time.deltaTime*Random.Range (1, 5), 0, 0);
@@ -51,11 +53,12 @@ public class CloudBehaviour : MonoBehaviour {
 	//Instantiate the rain
 	void spawnRain(Vector3 position)
 	{
-//		GameObject rain = (GameObject)Instantiate(m_rainPrefab, position, Quaternion.identity);
-//		rain.transform.parent = transform;
-//		rain.transform.rotation = Quaternion.Euler(90f,0f,0f);
-//		rain.transform.localScale = new Vector3(1f,1f,1f);
-		
+		GameObject rain = (GameObject)Instantiate(m_rainPrefab, position, Quaternion.identity);
+		//rain.particleSystem.Stop();
+		rain.transform.parent = transform;
+		//rain.transform.rotation = Quaternion.Euler(90f,0f,0f);
+		//rain.transform.localScale = new Vector3(1f,1f,1f);
+		//rain.particleSystem.Emit(1000);
 	}
 
 	// Suppress the rain

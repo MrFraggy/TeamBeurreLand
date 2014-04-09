@@ -63,11 +63,12 @@ public class EntonnoirBehaviour : MonoBehaviour {
 			children[0].transform.localScale = Vector3.Lerp (minScale, maxScale, factor);
 			children[0].SetActive (true);
 		}
+		Debug.Log(waterQuantity);
 	}
 
 	void OnParticleCollision(GameObject other) {
 		if (waterQuantity < WaterCapacity)
-			waterQuantity += 1.0f - holeSize;
+			waterQuantity += (1.0f - holeSize)*100f;
 
 		waterSplash.emissionRate = initialEmissionRate * holeSize;
 
