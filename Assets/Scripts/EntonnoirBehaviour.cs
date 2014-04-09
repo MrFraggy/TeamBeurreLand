@@ -10,7 +10,7 @@ public class EntonnoirBehaviour : MonoBehaviour {
 	public Vector3 maxHeight = new Vector3(1.0f, 1.0f, 1.0f);
 	public float minRadius = 0.1f;
 	public float maxRadius = 0.5f;
-	public GameObject[] children = new GameObject[3];
+	public GameObject[] children = new GameObject[2];
 
 	private float waterQuantity = 0;
 	private vrJoystick entonnoirHole;
@@ -18,6 +18,10 @@ public class EntonnoirBehaviour : MonoBehaviour {
 	private float holeSize;
 	private float initialEmissionRate;
 	private float initialStartSpeed;
+	private Vector3 minPosition;
+	private Vector3 maxPosition;
+	private Vector3 minScale;
+	private Vector3 maxScale;
 
 	// Use this for initialization
 	void Start () {
@@ -29,6 +33,13 @@ public class EntonnoirBehaviour : MonoBehaviour {
 		if (MiddleVR.VRDeviceMgr != null) {
 			entonnoirHole = MiddleVR.VRDeviceMgr.GetJoystick ("RazerHydra.Joystick0");
 		}
+
+		minPosition = children[0].transform.localPosition;
+		maxPosition = children [1].transform.localPosition;
+		minScale = children [0].transform.localScale;
+		maxScale = children [1].transform.localScale;
+		children [0].SetActive (false);
+		children [1].SetActive (false);
 	}
 	
 	// Update is called once per frame
@@ -42,28 +53,15 @@ public class EntonnoirBehaviour : MonoBehaviour {
 			waterQuantity -= holeSize;
 		if (waterQuantity <= MinWater) {
 			waterSplash.enableEmission = false;
-			children [0].SetActive (false);
-			children [1].SetActive (false);
-			children [2].SetActive (false);
+			children[0].SetActive(false);
 		}
 		else {
 			waterSplash.startSpeed = initialStartSpeed * holeSize;
 			waterSplash.enableEmission = true;
-			if (waterQuantity < WaterCapacity / 3.0f) {
-				children[0].SetActive(true);
-				children[1].SetActive(false);
-				children[2].SetActive(false);
-			}
-			else if (waterQuantity < WaterCapacity / 3.0f * 2.0f) {
-				children[0].SetActive(false);
-				children[1].SetActive(true);
-				children[2].SetActive(false);
-			}
-			else {
-				children[0].SetActive(false);
-				children[1].SetActive(false);
-				children[2].SetActive(true);
-			}
+			float factor = waterQuantity / WaterCapacity;
+			children[0].transform.localPosition = Vector3.Lerp(minPosition, maxPosition, factor);
+			children[0].transform.localScale = Vector3.Lerp (minScale, maxScale, factor);
+			children[0].SetActive (true);
 		}
 	}
 
