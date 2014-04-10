@@ -84,7 +84,7 @@ public class EntonnoirBehaviour : MonoBehaviour {
 			}
 		}
 
-		Debug.Log(waterQuantity);
+		//Debug.Log(waterQuantity);
 	}
 
 	void OnParticleCollision(GameObject other) {

@@ -14,6 +14,8 @@ public class VillageBehavior : MonoBehaviour {
 
     public Material roofMaterial;
 
+	public Objectives general;
+
     List<Transform> getChildren(Transform root, string tag)
     {
         List<Transform> list = new List<Transform>();
@@ -38,6 +40,8 @@ public class VillageBehavior : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		general = GameObject.FindGameObjectWithTag("Finish").transform.GetComponent<Objectives>();
+		audio.Stop();
         foreach (Transform t in transform)
         {
             if (t.tag.StartsWith("Tree"))
@@ -67,6 +71,8 @@ public class VillageBehavior : MonoBehaviour {
         }
 		if (rainQuantity >= WaterRequired) {
 			Debug.Log ("Village Rescued");
+			general.rescued();
+			audio.Play();
 			//gameObject.renderer.material.color = Color.green;
 			this.collider.enabled = false;
 
