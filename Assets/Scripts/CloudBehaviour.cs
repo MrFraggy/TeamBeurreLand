@@ -12,21 +12,15 @@ public class CloudBehaviour : MonoBehaviour {
 
 		m_rainRate = Random.Range(0, 100);
 		m_isRaining = false;
-		//spawnRain(this.transform.position);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		return;
-		//MOTION
-		if (transform.position.z < 0.0f && transform.position.z > -50.0f){
-			transform.position += new Vector3(Time.deltaTime*Random.Range (1, 5), 0, 0);
-			//transform.TransformDirection(Quaternion.Euler(0.0f, (float)Random.Range (90, 180), 0.0f).eulerAngles);
-		}else if(transform.position.z >= 0.0f && transform.position.z < 50.0f){
-			transform.position +=  new Vector3(-Time.deltaTime*Random.Range (1, 5), 0, 0);
-			//transform.TransformDirection(Quaternion.Euler(0.0f, (float)Random.Range (90, 180), 0.0f).eulerAngles);
-		}
 
+		//MOTION
+		if ((transform.position.x < 0.0f && transform.position.x > -50.0f) || (transform.position.x > 0.0f && transform.position.x < 50.0f)) {
+			transform.position += new Vector3 (Time.deltaTime * Random.Range (1, 5), 0, 0);
+		}
 		//RAIN
 		if(m_isRaining == true){
 			m_rainRate = m_rainRate - Time.deltaTime*10;
@@ -48,17 +42,17 @@ public class CloudBehaviour : MonoBehaviour {
 				m_isRaining = true;
 			}
 		}
+
+		gameObject.renderer.material.color = new Color(m_rainRate/10, m_rainRate/10, m_rainRate/10);
 	}
 
 	//Instantiate the rain
 	void spawnRain(Vector3 position)
 	{
 		GameObject rain = (GameObject)Instantiate(m_rainPrefab, position, Quaternion.identity);
-		//rain.particleSystem.Stop();
 		rain.transform.parent = transform;
-		//rain.transform.rotation = Quaternion.Euler(90f,0f,0f);
-		//rain.transform.localScale = new Vector3(1f,1f,1f);
-		//rain.particleSystem.Emit(1000);
+		rain.transform.Rotate (0,90,0);
+		rain.transform.Translate (0, -5, 0);
 	}
 
 	// Suppress the rain
