@@ -9,19 +9,28 @@ public class CloudBehaviour : MonoBehaviour {
     public float timeToLive = 30f;
     public CloudMotion manager;
     public float speed = 1f;
+    public AudioSource rainSound;
 
 	// Use this for initialization
 	void Start () {
         spawnRain();
+        rainSound.Stop();
+        rainSound.Play();
+        
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
+        rainSound.transform.position = transform.position;
+        Vector3 dir = new Vector3 (1.0f, 0, 0) * speed * Time.deltaTime;
+        Debug.DrawRay(transform.position, new Vector3(-5, -transform.position.y, 0), Color.red);
 		//MOTION
 		if ((transform.position.x < 0.0f && transform.position.x > -50.0f) || (transform.position.x > 0.0f && transform.position.x < 50.0f)) {
-			transform.position += new Vector3 (1.0f, 0, 0) * speed * Time.deltaTime;
+			transform.position += dir;
 		}
+
+
+        
 
         //Time to leave
         timeToLive -= Time.deltaTime;
@@ -29,6 +38,7 @@ public class CloudBehaviour : MonoBehaviour {
         {
             //if (m_isRaining)
             //{
+            rainSound.Stop();
                 suppressRain();
                 
             //}
@@ -38,10 +48,20 @@ public class CloudBehaviour : MonoBehaviour {
 
             if (c.a < 0.1f)
             {
-                manager.removeCloud(this);
+                if(manager != null)
+                    manager.removeCloud(this);
             }
             return;
         }
+
+        // Sound
+        /*RaycastHit hitInfo;
+        if (Physics.Raycast(transform.position, new Vector3(-5, -transform.position.y, 0), out hitInfo, 1000f))
+        {
+            audio.transform.position = hitInfo.point;
+            if (!audio.isPlaying)
+                audio.Play();
+        }*/
 
 		//RAIN
 		/*if(m_isRaining){
