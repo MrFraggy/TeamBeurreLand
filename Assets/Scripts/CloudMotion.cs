@@ -9,7 +9,8 @@ public class CloudMotion : MonoBehaviour {
 	public int m_generationWidth;
 	public Transform m_suppressionPoint;
 	public int m_suppressionWidth;
-	public int m_cloudGenerationHeight;
+	public float averageHeight = 50f;
+    public float heightRange = 5;
 	public float m_timeToWait;
 
 	private List<CloudBehaviour> m_clouds;
@@ -42,10 +43,10 @@ public class CloudMotion : MonoBehaviour {
 
 	IEnumerator instanciateClouds(){
 		while(true){
-			float xPos = Random.Range(m_generationPoint.position.x + 10, m_generationPoint.position.x -10);
-			float yPos = Random.Range(m_generationPoint.position.y - m_cloudGenerationHeight/2, m_generationPoint.position.y + m_cloudGenerationHeight/2);
-			float zPos = Random.Range(m_generationPoint.position.z + m_generationWidth/2, m_generationPoint.position.z - m_generationWidth/2);
-			Vector3 position = new Vector3(xPos, yPos , zPos);
+			float xPos = Random.Range(-10, 10);
+            float yPos = Random.Range(-heightRange / 2, heightRange / 2);
+			float zPos = Random.Range(-m_generationWidth/2, m_generationWidth/2);
+            Vector3 position = new Vector3(xPos, averageHeight+yPos, zPos);
 			int randomCloud = Random.Range (1, 3);
 			if(m_clouds.Count < m_maxCloud){
 				//Debug.Log ("INSTANCIATE");
