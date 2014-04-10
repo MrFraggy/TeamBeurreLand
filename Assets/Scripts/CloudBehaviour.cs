@@ -34,25 +34,25 @@ public class CloudBehaviour : MonoBehaviour {
 
         //Time to leave
         timeToLive -= Time.deltaTime;
-        if (timeToLive < 0)
-        {
-            //if (m_isRaining)
-            //{
-            rainSound.Stop();
-                suppressRain();
-                
-            //}
-            Color c = renderer.material.color;
-            c.a -= 0.3f * Time.deltaTime;
-            renderer.material.color = c;
-
-            if (c.a < 0.1f)
-            {
-                if(manager != null)
-                    manager.removeCloud(this);
-            }
-            return;
-        }
+//        if (timeToLive < 0)
+//        {
+//            //if (m_isRaining)
+//            //{
+//            rainSound.Stop();
+//                suppressRain();
+//                
+//            //}
+//            Color c = renderer.material.color;
+//            c.a -= 0.3f * Time.deltaTime;
+//            renderer.material.color = c;
+//
+//            if (c.a < 0.1f)
+//            {
+//                if(manager != null)
+//                    manager.removeCloud(this);
+//            }
+//            return;
+//        }
 
         // Sound
         /*RaycastHit hitInfo;
