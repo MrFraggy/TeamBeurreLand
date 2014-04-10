@@ -11,8 +11,8 @@ public class CloudBehaviour : MonoBehaviour {
 	void Start () {
 
 		m_rainRate = Random.Range(0, 100);
-		//m_isRaining = false;
-		spawnRain(this.transform.position);
+		m_isRaining = false;
+		//spawnRain(this.transform.position);
 	}
 	
 	// Update is called once per frame
