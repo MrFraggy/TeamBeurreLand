@@ -32,7 +32,7 @@ public class VillageBehavior : MonoBehaviour {
                 stack.Push(t);
             }
         }
-        Debug.Log(list.Count+" trouvés");
+        //Debug.Log(list.Count+" trouvés");
         return list;
     }
 

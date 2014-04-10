@@ -6,6 +6,8 @@ public class CloudBehaviour : MonoBehaviour {
 	public float m_rainRate; // 0 : no rain, cloud white / 1 : about to rain, cloud black
 	public GameObject m_rainPrefab;
 	private bool m_isRaining;
+    public float timeToLive = 30f;
+    public CloudMotion manager;
 
 	// Use this for initialization
 	void Start () {
@@ -16,11 +18,32 @@ public class CloudBehaviour : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+        
 		//MOTION
 		if ((transform.position.x < 0.0f && transform.position.x > -50.0f) || (transform.position.x > 0.0f && transform.position.x < 50.0f)) {
 			transform.position += new Vector3 (Time.deltaTime * Random.Range (1, 5), 0, 0);
 		}
+
+        //Time to leave
+        timeToLive -= Time.deltaTime;
+        if (timeToLive < 0)
+        {
+            if (m_isRaining)
+            {
+                suppressRain();
+                m_isRaining = false;
+            }
+            Color c = renderer.material.color;
+            c.a -= 0.3f * Time.deltaTime;
+            renderer.material.color = c;
+
+            if (c.a < 0.1f)
+            {
+                manager.removeCloud(this);
+            }
+            return;
+        }
+
 		//RAIN
 		if(m_isRaining == true){
 			m_rainRate = m_rainRate - Time.deltaTime*10;
@@ -42,8 +65,10 @@ public class CloudBehaviour : MonoBehaviour {
 				m_isRaining = true;
 			}
 		}
-
-		gameObject.renderer.material.color = new Color(m_rainRate/10, m_rainRate/10, m_rainRate/10);
+        float grey = Mathf.Max((100f-m_rainRate)/100f, 0);
+        Color c2 = new Color(grey, grey, grey,1.0f);
+        //Debug.Log(c2);
+		renderer.material.color = c2;
 	}
 
 	//Instantiate the rain
