@@ -52,6 +52,9 @@ public class VillageBehavior : MonoBehaviour {
 
     }
 	void OnParticleCollision (GameObject other) {
+		if(!other.transform.tag.StartsWith("RainEntonnoir"))
+			return;
+
 		++rainQuantity;
         float percent = Mathf.Lerp(0, 1 * 2f,rainQuantity / (WaterRequired*1.0f));
         //Debug.Log(percent);
