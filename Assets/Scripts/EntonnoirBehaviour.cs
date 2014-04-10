@@ -4,14 +4,14 @@ using MiddleVR_Unity3D;
 
 public class EntonnoirBehaviour : MonoBehaviour {
 
+	public enum State {SplashEnable, SplashDisable};
+
 	public float WaterCapacity = 10;
 	public float MinWater = 0.2f;
-	public Vector3 minHeight = new Vector3(0.0f, 0.0f, 0.0f);
-	public Vector3 maxHeight = new Vector3(1.0f, 1.0f, 1.0f);
-	public float minRadius = 0.1f;
-	public float maxRadius = 0.5f;
+	public float WaterMultiplier = 10.0f;
 	public GameObject[] children = new GameObject[2];
 
+	private State state = State.SplashDisable;
 	private float waterQuantity = 0;
 	private vrJoystick entonnoirHole;
 	private ParticleSystem waterSplash = null;
@@ -49,28 +49,34 @@ public class EntonnoirBehaviour : MonoBehaviour {
 		float axis = entonnoirHole.GetAxisValue(2);
 		holeSize = 1.0f - axis;
 
-		if (waterQuantity > 0)
-			waterQuantity -= holeSize;
-		if (waterQuantity <= MinWater) {
-			waterSplash.enableEmission = false;
-			children[0].SetActive(false);
-		}
-		else {
+		if (state == State.SplashEnable) {
+			waterSplash.emissionRate = initialEmissionRate * holeSize;
 			waterSplash.startSpeed = initialStartSpeed * holeSize;
+			waterQuantity -= holeSize;
 			waterSplash.enableEmission = true;
 			float factor = waterQuantity / WaterCapacity;
 			children[0].transform.localPosition = Vector3.Lerp(minPosition, maxPosition, factor);
 			children[0].transform.localScale = Vector3.Lerp (minScale, maxScale, factor);
 			children[0].SetActive (true);
+			if (waterQuantity < 0) {
+				state = State.SplashDisable;
+			}
 		}
+
+		else if (state == State.SplashDisable) {
+			waterSplash.enableEmission = false;
+			children[0].SetActive (false);
+			if (waterQuantity > 0) {
+				state = State.SplashEnable;
+			}
+		}
+
 		Debug.Log(waterQuantity);
 	}
 
 	void OnParticleCollision(GameObject other) {
 		if (waterQuantity < WaterCapacity)
-			waterQuantity += (1.0f - holeSize)*100f;
-
-		waterSplash.emissionRate = initialEmissionRate * holeSize;
+			waterQuantity += (1.0f - holeSize) * WaterMultiplier;
 
 	}
 }
