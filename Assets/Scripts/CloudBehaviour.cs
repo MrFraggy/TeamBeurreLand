@@ -3,16 +3,16 @@ using System.Collections;
 
 public class CloudBehaviour : MonoBehaviour {
 
-	public float m_rainRate = 0; // 0 : no rain, cloud white / 1 : about to rain, cloud black
-	public GameObject m_rainPrefab;
-	private bool m_isRaining = false;
+	//public float m_rainRate = 0; // 0 : no rain, cloud white / 1 : about to rain, cloud black
+	public GameObject m_rain;
+	//private bool m_isRaining = false;
     public float timeToLive = 30f;
     public CloudMotion manager;
     public float speed = 1f;
 
 	// Use this for initialization
 	void Start () {
-
+        spawnRain();
 	}
 	
 	// Update is called once per frame
@@ -27,11 +27,11 @@ public class CloudBehaviour : MonoBehaviour {
         timeToLive -= Time.deltaTime;
         if (timeToLive < 0)
         {
-            if (m_isRaining)
-            {
+            //if (m_isRaining)
+            //{
                 suppressRain();
-                m_isRaining = false;
-            }
+                
+            //}
             Color c = renderer.material.color;
             c.a -= 0.3f * Time.deltaTime;
             renderer.material.color = c;
@@ -44,39 +44,38 @@ public class CloudBehaviour : MonoBehaviour {
         }
 
 		//RAIN
-		if(m_isRaining == true){
+		/*if(m_isRaining){
 			m_rainRate = m_rainRate - Time.deltaTime*10;
 
 			if (m_rainRate <= 0.0f){
-
 				// Suppress rain
 				suppressRain();
 				m_rainRate = Random.Range(0, 100);
-				m_isRaining = false;
 			}
-		}else if (m_isRaining ==false){
+		} else {
 
 			m_rainRate = m_rainRate + Time.deltaTime*10;
 			if (m_rainRate >= 100.0f){
 				// Create rain
-				spawnRain(this.transform.position);
+				spawnRain();
 				m_rainRate = Random.Range(0, 100);
-				m_isRaining = true;
 			}
 		}
         float grey = Mathf.Max((100f-m_rainRate)/100f, 0);
         Color c2 = new Color(grey, grey, grey,1.0f);
         //Debug.Log(c2);
-		renderer.material.color = c2;
+		renderer.material.color = c2;*/
 	}
 
 	//Instantiate the rain
-	void spawnRain(Vector3 position)
+	void spawnRain()
 	{
-		GameObject rain = (GameObject)Instantiate(m_rainPrefab, position, Quaternion.identity);
+		/*GameObject rain = (GameObject)Instantiate(m_rainPrefab, transform.position, Quaternion.identity);
 		rain.transform.parent = transform;
 		rain.transform.Rotate (0,90,0);
-		rain.transform.Translate (0, -5, 0);
+		rain.transform.Translate (0, -5, 0);*/
+        m_rain.particleSystem.Play();
+        //m_isRaining = true;
 	}
 
 	void colorCloud(float m_rainRate){
@@ -92,11 +91,12 @@ public class CloudBehaviour : MonoBehaviour {
 	// Suppress the rain
 	void suppressRain()
 	{
-		foreach(Transform child in this.transform){
-			if(child.tag == "Rain"){
+		/*foreach(Transform child in this.transform){
+			if(child.tag.StartsWith("Rain")){
 				Destroy(child.gameObject);
 			}
-		}
-	
+		}*/
+        m_rain.particleSystem.Stop();
+        //m_isRaining = false;
 	}
 }
