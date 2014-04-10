@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using MiddleVR_Unity3D;
+using System.Collections.Generic;
 
 public class EntonnoirBehaviour : MonoBehaviour {
 
@@ -12,7 +13,7 @@ public class EntonnoirBehaviour : MonoBehaviour {
 	public GameObject[] children = new GameObject[2];
 
 	private State state = State.SplashDisable;
-	private AudioSource dropSound;
+
 	private float waterQuantity = 0;
 	private vrJoystick entonnoirHole;
 	private ParticleSystem waterSplash = null;
@@ -24,6 +25,9 @@ public class EntonnoirBehaviour : MonoBehaviour {
 	private Vector3 minScale;
 	private Vector3 maxScale;
 
+	public AudioSource waterDrop;
+	public AudioSource waterFall;
+
 	// Use this for initialization
 	void Start () {
 		waterSplash = gameObject.GetComponentInChildren<ParticleSystem> ();
@@ -31,7 +35,10 @@ public class EntonnoirBehaviour : MonoBehaviour {
 		holeSize = 1.0f;
 		initialEmissionRate = waterSplash.emissionRate;
 		initialStartSpeed = waterSplash.startSpeed;
-		dropSound = gameObject.GetComponentInChildren<AudioSource> ();
+
+		waterDrop.Stop ();
+		waterFall.Stop ();
+
 		if (MiddleVR.VRDeviceMgr != null) {
 			entonnoirHole = MiddleVR.VRDeviceMgr.GetJoystick ("RazerHydra.Joystick0");
 		}
@@ -52,6 +59,7 @@ public class EntonnoirBehaviour : MonoBehaviour {
 		holeSize = 1.0f - axis;
 
 		if (state == State.SplashEnable) {
+
 			waterSplash.emissionRate = initialEmissionRate * holeSize;
 			waterSplash.startSpeed = initialStartSpeed * holeSize;
 			waterQuantity -= holeSize;
@@ -60,6 +68,8 @@ public class EntonnoirBehaviour : MonoBehaviour {
 			children[0].transform.localPosition = Vector3.Lerp(minPosition, maxPosition, factor);
 			children[0].transform.localScale = Vector3.Lerp (minScale, maxScale, factor);
 			children[0].SetActive (true);
+			if (!waterFall.isPlaying)
+				waterFall.Play();
 			if (waterQuantity < 0) {
 				state = State.SplashDisable;
 			}
@@ -68,6 +78,7 @@ public class EntonnoirBehaviour : MonoBehaviour {
 		else if (state == State.SplashDisable) {
 			waterSplash.enableEmission = false;
 			children[0].SetActive (false);
+			waterFall.Stop();
 			if (waterQuantity > 0) {
 				state = State.SplashEnable;
 			}
@@ -80,7 +91,7 @@ public class EntonnoirBehaviour : MonoBehaviour {
 		if (waterQuantity < WaterCapacity) 
 			waterQuantity += (1.0f - holeSize) * WaterMultiplier;
 
-		dropSound.Play ();
+		waterDrop.Play();
 
 	}
 }
