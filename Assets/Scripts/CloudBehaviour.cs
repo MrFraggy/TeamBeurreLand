@@ -50,6 +50,8 @@ public class CloudBehaviour : MonoBehaviour {
 		GameObject rain = (GameObject)Instantiate(m_rainPrefab, position, Quaternion.identity);
 		//rain.particleSystem.Stop();
 		rain.transform.parent = transform;
+		rain.transform.Rotate (0,90,0);
+		rain.transform.Translate (0, -5, 0);
 		//rain.transform.rotation = Quaternion.Euler(90f,0f,0f);
 		//rain.transform.localScale = new Vector3(1f,1f,1f);
 		//rain.particleSystem.Emit(1000);
