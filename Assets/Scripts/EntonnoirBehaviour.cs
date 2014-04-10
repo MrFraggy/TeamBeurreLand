@@ -12,6 +12,7 @@ public class EntonnoirBehaviour : MonoBehaviour {
 	public GameObject[] children = new GameObject[2];
 
 	private State state = State.SplashDisable;
+	private AudioSource dropSound;
 	private float waterQuantity = 0;
 	private vrJoystick entonnoirHole;
 	private ParticleSystem waterSplash = null;
@@ -30,6 +31,7 @@ public class EntonnoirBehaviour : MonoBehaviour {
 		holeSize = 1.0f;
 		initialEmissionRate = waterSplash.emissionRate;
 		initialStartSpeed = waterSplash.startSpeed;
+		dropSound = gameObject.GetComponentInChildren<AudioSource> ();
 		if (MiddleVR.VRDeviceMgr != null) {
 			entonnoirHole = MiddleVR.VRDeviceMgr.GetJoystick ("RazerHydra.Joystick0");
 		}
@@ -75,8 +77,10 @@ public class EntonnoirBehaviour : MonoBehaviour {
 	}
 
 	void OnParticleCollision(GameObject other) {
-		if (waterQuantity < WaterCapacity)
+		if (waterQuantity < WaterCapacity) 
 			waterQuantity += (1.0f - holeSize) * WaterMultiplier;
+
+		dropSound.Play ();
 
 	}
 }
