@@ -25,9 +25,9 @@ public class CloudBehaviour : MonoBehaviour {
         Vector3 dir = new Vector3 (1.0f, 0, 0) * speed * Time.deltaTime;
         Debug.DrawRay(transform.position, new Vector3(-5, -transform.position.y, 0), Color.red);
 		//MOTION
-		if ((transform.position.x < 0.0f && transform.position.x > -50.0f) || (transform.position.x > 0.0f && transform.position.x < 50.0f)) {
-			transform.position += dir;
-		}
+//		if ((transform.position.x < 0.0f && transform.position.x > -50.0f) || (transform.position.x > 0.0f && transform.position.x < 50.0f)) {
+//			transform.position += dir;
+//		}
 
 
         
