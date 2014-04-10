@@ -24,6 +24,13 @@ public class CloudMotion : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+		for(int i = 0; i < m_clouds.Count; ++i){
+			if(m_clouds[i].gameObject.renderer.material.color.a < 0.9){
+				Color c = m_clouds[i].gameObject.renderer.material.color;
+				c.a += 0.3f * Time.deltaTime;
+				m_clouds[i].gameObject.renderer.material.color = c;
+			}
+		}
 	}
 
     public void removeCloud(CloudBehaviour cloud)
@@ -46,7 +53,12 @@ public class CloudMotion : MonoBehaviour {
 				cloud.transform.parent = transform;
 				cloud.transform.localScale = new Vector3(1f,1f,1f);
 				cloud.transform.Rotate(0,0, 100);
-                cloud.manager = this;
+				cloud.manager = this;
+
+				Color cloudColor = cloud.gameObject.renderer.material.color;
+				cloudColor.a = 0.0f;
+				cloud.gameObject.renderer.material.color = cloudColor;
+
 				m_clouds.Add(cloud);
 			}
 
