@@ -8,6 +8,7 @@ public class CloudBehaviour : MonoBehaviour {
 	private bool m_isRaining = false;
     public float timeToLive = 30f;
     public CloudMotion manager;
+    public float speed = 1f;
 
 	// Use this for initialization
 	void Start () {
@@ -19,7 +20,7 @@ public class CloudBehaviour : MonoBehaviour {
 
 		//MOTION
 		if ((transform.position.x < 0.0f && transform.position.x > -50.0f) || (transform.position.x > 0.0f && transform.position.x < 50.0f)) {
-			transform.position += new Vector3 (Time.deltaTime * Random.Range (1, 5), 0, 0);
+			transform.position += new Vector3 (1.0f, 0, 0) * speed * Time.deltaTime;
 		}
 
         //Time to leave
