@@ -23,7 +23,7 @@ public class Objectives : MonoBehaviour {
 		villagesRescued++;
 		if(villagesRescued >= maxVillagesToRescue) {
 			Debug.Log("Game over");
-			text.transform.parent = camera.transform;
+			text.transform.parent = GameObject.Find("CameraStereo0").transform;
 			text.renderer.enabled = true;
 		}
 	}
